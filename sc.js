@@ -6,12 +6,14 @@ const brickArea = document.getElementById("brick-area")
 //ball postion
 let ballX = 400
 let ballY = 950
-let ballSpeedX = 5
-let ballSpeedY = -5
+let ballSpeedX = 3
+let ballSpeedY = 4
 
 //paddle pos
 let paddleX = 400 //mid pos
-let paddleSpeed = 20
+let paddleSpeed = 2
+let movingLeft = false; // Flag for left movement
+let movingRight = false; // Flag for right movement
 
 //bricks
 let rows = 5
@@ -33,21 +35,34 @@ function createBricks() {
 }
 createBricks()
 
-document.addEventListener("keydown",(e) => {
-    if (e.key === "ArrowLeft" && paddleX > 0) {
-            paddleX -= paddleSpeed
-    }else if (e.key === "ArrowRight" && paddleX < gameArea.clientWidth - paddle.clientWidth) {
-        paddleX += paddleSpeed
+function player(e) {
+  if (e.key === "ArrowLeft") {
+    movingLeft = true; // Set left movement flag
+  } else if (e.key === "ArrowRight") {
+    movingRight = true; // Set right movement flag
+  }
+}
+
+  function stopPaddleMovement(e) {
+    if (e.key === "ArrowLeft") {
+      movingLeft = false; // Clear left movement flag
+    } else if (e.key === "ArrowRight") {
+      movingRight = false; // Clear right movement flag
     }
-    paddle.style.left = `${paddleX}px`
-requestAnimationFrame(paddle);
+  }
 
-})
+function update(){
 
-function ballz(){
     ballX += ballSpeedX
     ballY += ballSpeedY
-
+    if (movingLeft && paddleX > 0) {
+      paddleX -= paddleSpeed; // Move left
+    }
+    if (movingRight && paddleX < gameArea.clientWidth - paddle.clientWidth) {
+      paddleX += paddleSpeed; // Move right
+    }
+  
+    paddle.style.left = `${paddleX}px`; // Update paddle position
     if (ballX <= 0 || ballX >= gameArea.clientWidth - ball.clientWidth) {
         ballSpeedX = -ballSpeedX
     }
@@ -77,18 +92,13 @@ function ballz(){
   }
 });
 
-// Game over condition
-// if (ballY >= gameArea.clientHeight) {
-//   alert("Game Over!");
-//   document.location.reload();
-// }
-
-// Update ball position
 ball.style.left = `${ballX}px`;
 ball.style.top = `${ballY}px`;
 
-requestAnimationFrame(ballz);
+requestAnimationFrame(update);
+requestAnimationFrame(player)
 }
+document.addEventListener("keydown", player);
+document.addEventListener("keyup", stopPaddleMovement);
 
-
-ballz();
+update()
