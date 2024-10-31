@@ -27,7 +27,7 @@
     width: 100px;
     height: 15px;
     background-color: #0095DD;
-    left: 50%;
+
     transform: translateX(-50%);
   }
   
