@@ -11,7 +11,34 @@
     height: 100vh;
     background-color: #111;
   }
-  
+  #board{
+    position: fixed;
+    width:800px ;
+  }
+  #score{
+    color: white;
+    position: fixed;
+    top: 5%;
+    left: 20vw;
+    font-size: 3vh;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #lives{
+    color: white;
+    position: fixed;
+    top: 5%;
+    left:70vw;
+    font-size: 3vh;
+  }
+  #speed{
+    color: white;
+    position: fixed;
+    top: 5%;
+    left:45vw;
+    font-size: 3vh;
+  }
   #game-area {
     position: relative;
     width: 800px;
@@ -27,7 +54,7 @@
     width: 100px;
     height: 15px;
     background-color: #0095DD;
-
+    left: 50%;
     transform: translateX(-50%);
   }
   
