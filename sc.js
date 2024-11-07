@@ -2,6 +2,7 @@
 const gameArea = document.getElementById("game-area")
 const paddle = document.getElementById("paddle")
 const ball = document.getElementById("ball")
+const fpsnum = document.getElementById("fps")
 const brickArea = document.getElementById("brick-area")
 gameArea.addEventListener("click", togglePause);
 //paddle pos
@@ -27,16 +28,35 @@ const bH = 20
 const bPadding = 10
 let start = false
 let hitpointMul = 4
+
+//fps 
+let times = [];
+let fps = 0;
+let fpsUpdateInterval = 500;
+let lastFpsUpdateTime = performance.now();
+
 function createBricks() {
+    let color = colorRandom()
     for (let row = 0; row < rows; row++){
       for (let colm = 0; colm < col; colm++){
-        const brick = document.createElement("div")
+        let brick = document.createElement("div")
+        brick.style.backgroundColor = color
+        console.log("🚀 ~ createBricks ~ colorRandom:", colorRandom)
         brick.classList.add("brick")
         brick.style.left = `${colm * (bW + bPadding)}px`;
         brick.style.top = `${row * (bH + bPadding)}px`;
         brickArea.appendChild(brick)
     }
 }
+
+
+  function colorRandom(){
+    
+    let random = '#' + Math.floor(Math.random()*16777215).toString(16);
+    return random
+
+  }
+
 }
 createBricks()
 
@@ -95,12 +115,26 @@ function togglePause(e) {
     // Reset game state
     start = false;
    
-  }      
+  }
+  function calculateFPS() {
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+    if (now - lastFpsUpdateTime >= fpsUpdateInterval) {
+    fpsnum.textContent = `FPS: ${fps}`;
+      lastFpsUpdateTime = now;
+    }
+  }
+  
+  
   function update(){
     if (paused) return;
-    document.getElementById("score").textContent = `Score: ${score}`
-    document.getElementById("lives").textContent = `Lives: ${lives}`
-    document.getElementById("speed").textContent = `level: ${level} speed ${maxSpeedX}`
+    calculateFPS()
+
+    document.getElementById("score").textContent = `Score:${score} level:${level} Speed:${maxSpeedX} Lives:${lives}`
    
     gameArea.addEventListener("mousemove", mose);
   
@@ -118,12 +152,8 @@ function togglePause(e) {
       lives--
       if (lives === 0){
         resetGame(); 
-      }
-
-    
+      }    
     }
-   
-
 
     let padRect = paddle.getBoundingClientRect();
     const ballRect = ball.getBoundingClientRect();
@@ -139,7 +169,7 @@ function togglePause(e) {
     ) {
 
       ballSpeedY = -ballSpeedY;
-      const hitPoint = (ballX - paddleX) / (100 - 0.5); // from -0.5 to 0.5
+      const hitPoint = (ballX - paddleX) / (100 - 0.1); // from -0.5 to 0.5
       c++
       console.log("🚀 ~ update ~ c:", c)
         if (c == 2){
@@ -151,7 +181,6 @@ function togglePause(e) {
             hitpointMul += 1
           }
         }
-          console.log("🚀 ~ update ~ ballSpeedX:", ballSpeedY)
    
        ballSpeedX += hitPoint * hitpointMul 
        ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX)) // Add slight variation to X speed based on hit point
@@ -182,10 +211,10 @@ function togglePause(e) {
 
     const minHit = Math.min(leftHit, rightHit, TopHit, bottomHit)
     if (minHit === leftHit || minHit === rightHit){
-      ballSpeedX = -ballSpeedX
+      ballSpeedX *= -1
     }
     if (minHit === TopHit || minHit === bottomHit){
-      ballSpeedY = -ballSpeedY
+      ballSpeedY *= -1
     }
   }
 });
@@ -199,5 +228,6 @@ ball.style.left = `${ballX}px`;
 ball.style.top = `${ballY}px`;
 
   requestAnimationFrame(update);
+
 }
 // update()
