@@ -14,7 +14,8 @@ let ballSpeedY = 2
 let score = 0
 let maxSpeedX = 2;
 ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX));
-
+let level = 1
+let levelspeed = 5
 
 
 let paused = false
@@ -89,7 +90,8 @@ function togglePause(e) {
     ballSpeedY = 2;
     score = 0
     maxSpeedX = 2 
-    lives = 3 
+    lives = 3
+    level = 1 
     // Reset game state
     start = false;
    
@@ -98,7 +100,7 @@ function togglePause(e) {
     if (paused) return;
     document.getElementById("score").textContent = `Score: ${score}`
     document.getElementById("lives").textContent = `Lives: ${lives}`
-    document.getElementById("speed").textContent = `Speed: ${maxSpeedX}`
+    document.getElementById("speed").textContent = `level: ${level} speed ${maxSpeedX}`
    
     gameArea.addEventListener("mousemove", mose);
   
@@ -142,7 +144,8 @@ function togglePause(e) {
       console.log("🚀 ~ update ~ c:", c)
         if (c == 2){
           c = 0
-          if (ballSpeedY < 10 ){
+          
+          if (ballSpeedY < levelspeed ){
             maxSpeedX++
             ballSpeedY++
             hitpointMul += 1
@@ -187,7 +190,10 @@ function togglePause(e) {
   }
 });
 if (brickArea.querySelectorAll(".brick").length === 0 && ballY >= 500 ) {
+  level++ 
+  levelspeed += 2
   createBricks();
+
 }
 ball.style.left = `${ballX}px`;
 ball.style.top = `${ballY}px`;
