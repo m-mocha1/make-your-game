@@ -42,7 +42,6 @@ function createBricks() {
       for (let colm = 0; colm < col; colm++){
         let brick = document.createElement("div")
         brick.style.backgroundColor = color
-        console.log("🚀 ~ createBricks ~ colorRandom:", colorRandom)
         brick.classList.add("brick")
         brick.style.left = `${colm * (bW + bPadding)}px`;
         brick.style.top = `${row * (bH + bPadding)}px`;
@@ -174,9 +173,11 @@ function togglePause(e) {
     ) {
 
       ballSpeedY = -ballSpeedY;
-      const hitPoint = (ballX - paddleX) / (100 - 0.1); // from -0.5 to 0.5
+      console.log("🚀 ~ pos ~ c:", ballX)
+      console.log("🚀 ~ pospaddel ~ c:", paddleX)
+      
+      const hitPoint = (ballX - paddleX) / 99.5; // from -0.5 to 0.5
       c++
-      console.log("🚀 ~ update ~ c:", c)
         if (c == 2){
           c = 0
           
@@ -188,7 +189,7 @@ function togglePause(e) {
         }
    
        ballSpeedX += hitPoint * hitpointMul 
-       ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX)) // Add slight variation to X speed based on hit point
+      //  ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX)) // Add slight variation to X speed based on hit point
     }
 
      
@@ -218,6 +219,7 @@ function togglePause(e) {
     const bottomHit =brickRect.bottom-ballRect.top
 
     const minHit = Math.min(leftHit, rightHit, TopHit, bottomHit)
+
     if (minHit === leftHit || minHit === rightHit){
       ballSpeedX *= -1
     }
