@@ -4,6 +4,7 @@ const paddle = document.getElementById("paddle")
 const ball = document.getElementById("ball")
 const fpsnum = document.getElementById("fps")
 const brickArea = document.getElementById("brick-area")
+const leftside = document.getElementById("t")
 gameArea.addEventListener("click", togglePause);
 //paddle pos
 let paddleX = 300 //mid pos
@@ -65,11 +66,15 @@ function togglePause(e) {
       paused = !paused;
       if (!paused){
         update(); 
-      
-      } 
+        leftside.style.display = "none"
+        
+      } else{
+        leftside.style.display = "block"
+      }
         
   }
 }
+
 
   function mose(e){
     if (paused) return;
@@ -112,7 +117,6 @@ function togglePause(e) {
     maxSpeedX = 2 
     lives = 3
     level = 1 
-    // Reset game state
     start = false;
    
   }
@@ -124,11 +128,12 @@ function togglePause(e) {
     times.push(now);
     fps = times.length;
     if (now - lastFpsUpdateTime >= fpsUpdateInterval) {
-    fpsnum.textContent = `FPS: ${fps}`;
+    fpsnum.textContent =  `${fps}`;
       lastFpsUpdateTime = now;
     }
   }
-  
+
+
   
   function update(){
     if (paused) return;
@@ -201,6 +206,9 @@ function togglePause(e) {
     ballRect.bottom > brickRect.top
   ) {
     brickArea.removeChild(brick);
+    
+    
+    
     score += 100
 
     // better hit cola

@@ -12,23 +12,30 @@
     height: 100vh;
     background-color: #111;
   }
-  #board{
-    position: fixed;
-    width:800px ;
-  }
   #score{
+    color: rgb(253, 253, 253);
+    word-spacing: 60px;
+    max-width: fit-content;
+    margin-inline: auto;
+  }
+  #t{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 2vh;
     color: white;
-    position: fixed;
-    top: 5%;
-    font-size: 3vh;
-    max-width: fit-content;    
-    word-spacing: 90px;
+    position: absolute;
+    display: b;
+    top: 45%;
+    right: 20vh;
   }
   #fps{
-    color: rgb(246, 1, 1);
-    position: fixed;
+    color: rgb(255, 255, 255);
+    position: relative;    
+    overflow: hidden;
+    top: 0px;
+    right : 0px
   }
   #game-area {
+    transition:all 0.5s;
     position: relative;
     width: 800px;
     height: 1000px;
@@ -36,14 +43,20 @@
     border: 2px solid white;
     overflow: hidden;
   }
-  
+  #game-area:hover {
+    transition:all 0.5s;
+
+    scale: 120%
+  }
+
   #paddle {
     position: absolute;
     bottom: 15px;
     width: 100px;
     height: 15px;
-    background-color: #0095DD;
+    background-color: #03d1c7;
     left: 50%;
+    border-radius: 5px;
     transform: translateX(-50%);
   }
   
@@ -51,7 +64,7 @@
     position: absolute;
     width: 15px;
     height: 15px;
-    background-color: #00FF00;
+    background-color: #03d1c7;
     border-radius: 50%;
     left: 50%;
     bottom: 50px;
@@ -62,9 +75,8 @@
     position: absolute;
     width: 85px;
     height: 20px;
-    /* background-color: #FF5733; */
     border: 1px solid white;
     margin: 50px;
-   
+   border-radius: 5px ;
+   box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.808);
   }
-  
