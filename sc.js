@@ -5,6 +5,8 @@ const ball = document.getElementById("ball")
 const fpsnum = document.getElementById("fps")
 const brickArea = document.getElementById("brick-area")
 const leftside = document.getElementById("t")
+const timer = document.getElementById("timer")
+const overtext = document.getElementById("over")
 gameArea.addEventListener("click", togglePause);
 //paddle pos
 let paddleX = 300 //mid pos
@@ -18,8 +20,9 @@ let maxSpeedX = 2;
 ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX));
 let level = 1
 let levelspeed = 5
-
-
+let seconds = 0 
+let min = 0 
+let gameOverb = false
 let paused = false
 //bricks
 let rows = 5
@@ -61,22 +64,36 @@ function createBricks() {
 createBricks()
 
 function togglePause(e) {
-  if (e.button === 0) {
-      paused = !paused;
+  if (e.button === 0 && !gameOverb) {
+      paused = !paused; // !pused means tha game still going
+      leftside.style.transition = "opacity 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95)";
       if (!paused){
         update(); 
-        leftside.style.display = "none"
-        
+        leftside.style.opacity = "0";
       } else{
-        leftside.style.display = "block"
-      }
-        
+        leftside.style.visibility = "visible";
+        leftside.style.opacity = "1";
+      }   
   }
+}
+
+function gameOver(){
+  gameOverb = true
+  overtext.innerHTML = `Game Over<br>score ${score} in ${min}:${seconds}<br>space to restart` 
+  overtext.style.transition = "opacity 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95)";
+  overtext.style.visibility = "visible"
+  overtext.style.opacity = "1";
+  addEventListener("keydown", (e) => {
+    if (e.key === " "){
+      resetGame()
+    }    
+  })
 }
 
 
   function mose(e){
     if (paused) return;
+    if (gameOverb) return;
     let gameAreaRect = gameArea.getBoundingClientRect()
     let newPadx = e.clientX - gameAreaRect.left 
 
@@ -91,13 +108,10 @@ function togglePause(e) {
   
   document.addEventListener("keydown", startG);
   function startG(e){
-    if (e.key === " " && !start){
-      ballX = paddleX
-      start = true
-      requestAnimationFrame(update)
+    if (e.key === " " && paused){
+      resetGame()
     }
-    }
-  
+  }
   
   
   let c = 0
@@ -105,6 +119,9 @@ function togglePause(e) {
 
 
   function resetGame() {
+    gameOverb = false
+    paused = true
+    overtext.innerHTML = ""
     brickArea.innerHTML = ""
     createBricks()
     // Reset ball position and speed
@@ -117,6 +134,9 @@ function togglePause(e) {
     lives = 3
     level = 1 
     start = false;
+    seconds = 0
+    min = 0    
+    gameArea.style.border = " 2px solid white"
    
   }
   function calculateFPS() {
@@ -132,13 +152,25 @@ function togglePause(e) {
     }
   }
 
+ let time = setInterval(() => {
+        if (!paused){
+        seconds++
+        if(seconds == 60){
+          min++
+          seconds = 0
+        }
+      }
+      },1000)
 
-  
-  function update(){
-    if (paused) return;
-    calculateFPS()
+      
+      function update(){
+        if (paused) return;
+        if (gameOverb) return;
+        document.getElementById("score").textContent = `Score:${score} level:${level} Speed:${maxSpeedX} Lives:${lives}`
+        calculateFPS()
+    
 
-    document.getElementById("score").textContent = `Score:${score} level:${level} Speed:${maxSpeedX} Lives:${lives}`
+    timer.textContent = `${min}:${seconds}`
    
     gameArea.addEventListener("mousemove", mose);
   
@@ -150,12 +182,18 @@ function togglePause(e) {
     if (ballY <= 0) {
         ballSpeedY = -ballSpeedY
     }
-    
+
     if (ballY > gameArea.clientHeight) {
       ballSpeedY = -ballSpeedY
-      lives--
+      lives--      
+      if (lives == 2){
+        gameArea.style.border = " 2px solid yellow"
+      }
+      if (lives == 1){
+        gameArea.style.border = " 2px solid red"
+      }
       if (lives === 0){
-        resetGame(); 
+    gameOver()
       }    
     }
 
@@ -189,7 +227,7 @@ function togglePause(e) {
         }
    
        ballSpeedX += hitPoint * hitpointMul 
-      //  ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX)) // Add slight variation to X speed based on hit point
+       ballSpeedX = Math.max(-maxSpeedX, Math.min(maxSpeedX, ballSpeedX)) // Add slight variation to X speed based on hit point
     }
 
      
