@@ -7,6 +7,9 @@ const brickArea = document.getElementById("brick-area")
 const leftside = document.getElementById("t")
 const timer = document.getElementById("timer")
 const overtext = document.getElementById("over")
+const text = document.getElementById("t")
+text.innerHTML = `MOVE THE PADDEL WITH MOUSE<br><center><br>LEFT MOUSE CLICK TO PAUSE<br> <br>SPACE TO RESTART </cneter>`
+
 gameArea.addEventListener("click", togglePause);
 //paddle pos
 let paddleX = 300 //mid pos
@@ -26,7 +29,7 @@ let gameOverb = false
 let paused = false
 //bricks
 let rows = 5
-let col = 8
+let col = 10
 const bW = 80
 const bH = 20
 const bPadding = 10
@@ -79,7 +82,7 @@ function togglePause(e) {
 
 function gameOver(){
   gameOverb = true
-  overtext.innerHTML = `Game Over<br>score ${score} in ${min}:${seconds}<br>space to restart` 
+  overtext.innerHTML = `<center>GAME OVER<br><br>TIME ${min}:${seconds}<br>SCORE ${score}<br>SPACE TO RESTART</center>` 
   overtext.style.transition = "opacity 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95)";
   overtext.style.visibility = "visible"
   overtext.style.opacity = "1";
@@ -97,9 +100,10 @@ function gameOver(){
     let gameAreaRect = gameArea.getBoundingClientRect()
     let newPadx = e.clientX - gameAreaRect.left 
 
-    if (newPadx < 52) newPadx = 52;
-    if (newPadx > 750) {
-      newPadx = 745 ;
+    console.log("🚀 ~ mose ~ newPadx:", newPadx)
+    if (newPadx < 40) newPadx = 55;
+    if (newPadx > 940) {
+      newPadx = 940 ;
    }
     paddle.style.left = `${newPadx}px`; 
     paddleX = newPadx
@@ -115,7 +119,7 @@ function gameOver(){
   
   
   let c = 0
-  let lives = 3
+  let lives = 1
 
 
   function resetGame() {
@@ -126,7 +130,7 @@ function gameOver(){
     createBricks()
     // Reset ball position and speed
     ballX = paddleX;
-    ballY = 900;
+    ballY = 1120;
     ballSpeedX = 0;
     ballSpeedY = 2;
     score = 0
@@ -137,8 +141,26 @@ function gameOver(){
     seconds = 0
     min = 0    
     gameArea.style.border = " 2px solid white"
-   
+
+    
+    ball.classList.add('ball-exit');
+    ball.style.animation = 'ballExit 1s ease-out';
+  
+    // Wait for the exit animation to complete, then reset and apply entry animation
+    setTimeout(() => {
+      ball.classList.remove('ball-exit');
+      ball.style.animation = ''; // Clear the animation
+  
+      // Reset ball's position visually
+      ball.style.left = `${paddleX}px`;
+      ball.style.top = `95%`; // or the starting Y position
+  
+      // Apply the entry animation
+      ball.style.animation = 'ballEntry 1s ease-out';
+    }, 500);
   }
+
+  
   function calculateFPS() {
     const now = performance.now();
     while (times.length > 0 && times[0] <= now - 1000) {

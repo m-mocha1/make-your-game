@@ -28,15 +28,15 @@
     font-size: 2vh;
     color: white;
     position: absolute;
-    top: 50%;
-    right: 20vh;
+    top: 47%;
+    right: 23vh;
   }
   #over{
     font-size: 2vh;
     color: white;
     position: absolute;
     top: 50%;
-    right: 25vh;
+    margin-left:500px ;
 
   }
 
@@ -55,18 +55,14 @@
   #game-area {
     transition:all 0.5s;
     position: relative;
-    width: 800px;
-    height: 1000px;
+    width: 1000px;
+    height: 1200px;
     background-color: black;
     border: 2px solid white;
     overflow: hidden;
     border-radius: 8px;
   }
-  #game-area:hover {
-    transition:all 0.5s;
 
-    scale: 120%
-  }
 
   #paddle {
     position: absolute;
@@ -85,18 +81,43 @@
     height: 15px;
     background-color: #03d1c7;
     border-radius: 50%;
-    left: 50%;
-    bottom: 50px;
-    /* transform: translateX(-50%); */
+   
   }
   
   .brick {
     position: absolute;
-    width: 85px;
+    width: 70px;
     height: 20px;
     border: 1px solid white;
-    margin: 50px;
-   border-radius: 5px ;
+    margin-top: 3vh;
+    margin-left: 4vh;
+    border-radius: 5px ;
    box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.808);
+    
+  }
+  @keyframes ballEntry {
+    0% {
+      transform: scale(0.5);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes ballExit {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
   }
   
+  .ball-animate {
+   
+    animation: ballEntry 0.5s ease-out;
+    animation: ballExit 0.4s ease-out;
+  }
