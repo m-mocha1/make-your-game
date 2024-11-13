@@ -32,7 +32,7 @@ let rows = 5
 let col = 10
 const bW = 80
 const bH = 20
-const bPadding = 10
+const bPadding = 15
 let start = false
 let hitpointMul = 4
 
@@ -119,7 +119,7 @@ function gameOver(){
   
   
   let c = 0
-  let lives = 1
+  let lives = 3
 
 
   function resetGame() {
